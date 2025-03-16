@@ -1,0 +1,35 @@
+<div class="card mt-4">
+    <div class="card-header">
+        Confronto Metodi di Produzione
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Metodo</th>
+                    <th>Costo Unitario</th>
+                    <th>Lastre Necessarie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Plotter</td>
+                    <td>{{ results.plotter.unit_cost | euro }}</td>
+                    <td>{{ results.plotter.sheets }}</td>
+                </tr>
+                <tr>
+                    <td>Fustella</td>
+                    <td>{{ results.fustella.unit_cost | euro }}</td>
+                    <td>{{ results.fustella.sheets }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        {% if results.break_even %}
+        <div class="alert alert-info">
+            Conviene passare alla produzione a fustella per ordini superiori a 
+            <strong>{{ results.break_even }} pezzi</strong>
+        </div>
+        {% endif %}
+    </div>
+</div>

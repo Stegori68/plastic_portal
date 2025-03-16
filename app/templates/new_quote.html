@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Nuova Quotazione</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.material_id.label(class="form-label") }}
+                    {{ form.material_id(class="form-select") }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.production_type_id.label(class="form-label") }}
+                    {{ form.production_type_id(class="form-select") }}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.quantity.label(class="form-label") }}
+                    {{ form.quantity(class="form-control") }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.currency.label(class="form-label") }}
+                    {{ form.currency(class="form-select") }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.design_file.label(class="form-label") }}
+                    {{ form.design_file(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Calcola</button>
+    </form>
+</div>
+{% endblock %}
