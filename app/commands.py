@@ -5,6 +5,9 @@ from flask_migrate import Migrate
 from app import create_app, db
 from datetime import datetime
 
+app = create_app()
+migrate = Migrate(app, db)
+
 @app.cli.command("seed-db")
 def seed_db():
     """Popola il database con dati demo"""
