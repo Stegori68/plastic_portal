@@ -1,0 +1,13 @@
+.env
+instance/
+venv/
+
+# Esclude file generati da Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Esclude file di log
+*.log
+
