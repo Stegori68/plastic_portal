@@ -9,7 +9,7 @@ from datetime import date
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods='')
+@app.route('/login', methods='GET, POST')
 def login():
     # ... (Logica per la gestione del login) ...
     return render_template('login.html', title='Login')
@@ -19,7 +19,7 @@ def logout():
     # ... (Logica per la gestione del logout) ...
     return redirect(url_for('index'))
 
-@app.route('/quote', methods='')
+@app.route('/quote', methods='GET, POST')
 @login_required
 def quote():
     form = QuoteForm()
