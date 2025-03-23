@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Portale Plastica</title>
+</head>
+<body>
+    <h1>Benvenuto nel Portale Plastica</h1>
+    {% if current_user.is_authenticated %}
+        <p>Ciao, {{ current_user.email }}!</p>
+        <p><a href="{{ url_for('quote') }}">Richiedi un Preventivo</a></p>
+        {% if current_user.role == 'admin' %}
+            <p><a href="{{ url_for('admin_dashboard') }}">Area Amministrativa</a></p>
+        {% endif %}
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    {% else %}
+        <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Registrati</a></p>
+    {% endif %}
+</body>
+</html>
