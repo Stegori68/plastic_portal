@@ -19,7 +19,7 @@ def logout():
     # ... (Logica per la gestione del logout) ...
     return redirect(url_for('index'))
 
-@app.route('/quote', methods=('GET, POST'))
+@app.route('/quote', methods=['GET, POST'])
 @login_required
 def quote():
     form = QuoteForm()
