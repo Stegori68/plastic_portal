@@ -9,7 +9,7 @@ from datetime import date
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=('GET, POST'))
+@app.route('/login', methods=['GET, POST'])
 def login():
     # ... (Logica per la gestione del login) ...
     return render_template('login.html', title='Login')
