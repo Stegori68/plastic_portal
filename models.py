@@ -33,7 +33,7 @@ class Production(db.Model):
     name = db.Column(db.String(255), nullable=False)
     setup_cost = db.Column(db.Numeric(10, 2), nullable=False)
     cutting_cost_per_sheet = db.Column(db.Numeric(10, 2), nullable=False)
-    quotes = db.relationship('Quote', backref='production_type', lazy=True)
+    quotes = db.relationship('Quote', backref='production_quotes', lazy=True)
 
     def __repr__(self):
         return f"Production('{self.name}')"
