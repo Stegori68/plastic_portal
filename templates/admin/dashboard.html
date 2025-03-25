@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard Amministrativa</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Dashboard Amministrativa</h1>
+
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <p>Ciao, {{ current_user.email }}!</p>
+
+        <h2>Gestione</h2>
+            <ul>
+            <li><a href="{{ url_for('user_management') }}">Gestione Utenti</a></li>
+            <li><a href="{{ url_for('material_management') }}">Gestione Materiali</a></li>
+            <li><a href="{{ url_for('production_management') }}">Gestione Lavorazioni</a></li>
+        </ul>
+
+        <h2>Dati e Report</h2>
+        <ul>
+            <li><a href="{{ url_for('export_data') }}">Esportazione Dati / Preventivi</a></li>
+        </ul>
+
+        <h2>Altre Funzioni</h2>
+        <ul>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('index') }}">Torna alla Homepage</a></li>
+        </ul>
+
+        {% else %}
+        <p>Accesso non autorizzato.</p>
+        <p><a href="{{ url_for('login') }}">Effettua il Login come Amministratore</a></p>
+        {% endif %}
+
+    </body>
+</html>
