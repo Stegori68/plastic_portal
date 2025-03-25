@@ -22,7 +22,7 @@ class Material(db.Model):
     unit = db.Column(db.String(50), nullable=False)
     dimensions = db.Column(db.String(255))
     thickness = db.Column(db.Numeric(5, 2))
-    quotes = db.relationship('Quote', backref='material', lazy=True)
+    quotes = db.relationship('Quote', backref='related_quotes', lazy=True)
 
     def __repr__(self):
         return f"Material('{self.name}')"
