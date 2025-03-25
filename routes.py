@@ -5,11 +5,24 @@ from plastic_portal.models import User, Material, Production, Quote
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
 from . import app
+from werkzeug.security import generate_password_hash
 
 @app.route('/')
 def index():
     return render_template('index.html')
     # return "Allora funziona!"
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        new_user = User(email=form.email.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registrazione avvenuta con successo! Puoi effettuare il login.', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Registrazione', form=form)
 
 @app.route('/login', methods=['GET, POST'])
 def login():
