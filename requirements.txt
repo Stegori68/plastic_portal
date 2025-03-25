@@ -7,6 +7,7 @@ Flask-Mail==0.9.1
 mysql-connector-python==8.1.0
 python-dotenv==1.0.0
 pymysql
+email_validator
 # Aggiungere qui le librerie per il nesting e l'elaborazione di PDF/DXF
 # Esempio:
 # shapely
