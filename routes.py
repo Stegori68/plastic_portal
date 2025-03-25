@@ -36,6 +36,7 @@ def login():
         else:
             flash('Login fallito. Controlla email e password.', 'danger')
             return render_template('login.html', title='Login', form=form) # Pass the form to the template
+    return render_template('login.html', title='Login', form=form) # Pass the form to the template
 
 @app.route('/logout')
 def logout():
