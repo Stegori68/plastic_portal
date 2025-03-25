@@ -54,7 +54,7 @@ class Quote(db.Model):
     expiry_date = db.Column(db.Date)
     currency = db.Column(db.String(10), default='EUR')
     exchange_rate = db.Column(db.Numeric(10, 4))
-    material = db.relationship('Material', backref='quotes', lazy=True)
+    material = db.relationship('Material', backref='material_quotes', lazy=True)
     production_type = db.relationship('Production', backref='quotes', lazy=True)
 
     def __repr__(self):
