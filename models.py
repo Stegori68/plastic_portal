@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
         return f"User('{self.email}', '{self.role}')"
 
 class Material(db.Model):
+    __tablename__ = 'materials'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     cost_per_unit = db.Column(db.Numeric(10, 2), nullable=False)
@@ -27,6 +28,7 @@ class Material(db.Model):
         return f"Material('{self.name}')"
 
 class Production(db.Model):
+    __tablename__ = 'productions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     setup_cost = db.Column(db.Numeric(10, 2), nullable=False)
@@ -37,10 +39,11 @@ class Production(db.Model):
         return f"Production('{self.name}')"
 
 class Quote(db.Model):
+    __tablename__ = 'quotes'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    material_id = db.Column(db.Integer, db.ForeignKey('material.id'), nullable=False)
-    production_id = db.Column(db.Integer, db.ForeignKey('production.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    material_id = db.Column(db.Integer, db.ForeignKey('materials.id'), nullable=False)
+    production_id = db.Column(db.Integer, db.ForeignKey('productions.id'), nullable=False)
     quantity_requested = db.Column(db.Integer, nullable=False)
     element_dimensions = db.Column(db.String(255))
     drawing_path = db.Column(db.String(255))
@@ -51,11 +54,14 @@ class Quote(db.Model):
     expiry_date = db.Column(db.Date)
     currency = db.Column(db.String(10), default='EUR')
     exchange_rate = db.Column(db.Numeric(10, 4))
+    material = db.relationship('Material', backref='quotes', lazy=True)
+    production_type = db.relationship('Production', backref='quotes', lazy=True)
 
     def __repr__(self):
         return f"Quote('{self.id}', '{self.quantity_requested}')"
 
 class ExchangeRate(db.Model):
+    __tablename__ = 'exchange_rates'
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(10), unique=True, nullable=False)
     rate = db.Column(db.Numeric(10, 4), nullable=False)
@@ -65,6 +71,7 @@ class ExchangeRate(db.Model):
         return f"ExchangeRate('{self.currency}', '{self.rate}')"
 
 class Setting(db.Model):
+    __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
     value = db.Column(db.Text)
@@ -73,6 +80,7 @@ class Setting(db.Model):
         return f"Setting('{self.name}', '{self.value}')"
 
 class Log(db.Model):
+    __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     activity = db.Column(db.Text)
