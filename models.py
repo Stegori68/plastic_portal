@@ -55,7 +55,7 @@ class Quote(db.Model):
     currency = db.Column(db.String(10), default='EUR')
     exchange_rate = db.Column(db.Numeric(10, 4))
     material = db.relationship('Material', backref='material_quotes', lazy=True)
-    production_type = db.relationship('Production', backref='quotes', lazy=True)
+    production_type = db.relationship('Production', backref='quotes_for_production', lazy=True)
 
     def __repr__(self):
         return f"Quote('{self.id}', '{self.quantity_requested}')"
