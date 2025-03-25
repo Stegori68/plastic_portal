@@ -1,16 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, FileField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, DecimalField, SelectField, FileField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators='')
-    password = PasswordField('Password', validators='')
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Ricordami')
     submit = SubmitField('Accedi')
 
 class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators='')
-    password = PasswordField('Password', validators='')
-    confirm_password = PasswordField('Conferma Password', validators='')
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Conferma Password', validators=[DataRequired(), EqualTo('password', message='Le password devono corrispondere.')])
     submit = SubmitField('Registrati')
 
 class QuoteForm(FlaskForm):
