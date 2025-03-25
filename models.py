@@ -82,9 +82,10 @@ class Setting(db.Model):
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     activity = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('User', backref=db.backref('logs', lazy=True))
 
     def __repr__(self):
         return f"Log('{self.timestamp}', '{self.activity}')"
