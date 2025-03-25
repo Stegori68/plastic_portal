@@ -4,7 +4,7 @@ from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, Materia
 from plastic_portal.models import User, Material, Production, Quote
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
-from . import app
+from app import app
 
 @app.route('/')
 def index():
