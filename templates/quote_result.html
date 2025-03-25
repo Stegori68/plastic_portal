@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h1>{{ title }}</h1>
+
+{% if quote %}
+<h2>Risultato del Preventivo N. {{ quote.id }}</h2>
+<p><strong>Quantitativo Ordinabile:</strong> {{ quote.order_multiple }}</p>
+<p><strong>Costo Totale per Elemento:</strong> {{ quote.cost_per_element }} {{ quote.currency }}</p>
+<p><strong>Prezzo di Vendita Proposto:</strong> {{ quote.selling_price }} {{ quote.currency }}</p>
+
+{% if plotter_price and fustella_price %}
+<h3>Confronto Produzione</h3>
+<p><strong>Produzione a Plotter (Costo Totale/Elemento):</strong> {{ plotter_price }} {{ quote.currency }} (per quantitativi inferiori a quelli ottimali per la fustella)</p>
+<p><strong>Produzione a Fustella (Costo Totale/Elemento):</strong> {{ fustella_price }} {{ quote.currency }} (costo tooling ammortizzato su 4 lotti)</p>
+<p><strong>Produzione a Fustella (Costo Totale/Elemento con tooling distribuito):</strong> {{ fustella_price_distribuzione_tooling }} {{ quote.currency }} (costo tooling distribuito sul singolo componente)</p>
+{% if plotter_price < fustella_price %}
+<p>Per questo quantitativo, la produzione a plotter potrebbe essere più conveniente.</p>
+{% else %}
+<p>Per questo quantitativo, la produzione a fustella potrebbe essere più conveniente (considerando l'ammortamento del tooling).</p>
+{% endif %}
+{% endif %}
+
+<h3>Dettagli della Richiesta</h3>
+<ul>
+<li><strong>Materiale Richiesto:</strong> {{ quote.material.name }}</li>
+<li><strong>Quantitativo Richiesto:</strong> {{ quote.quantity_requested }}</li>
+<li><strong>Tipologia di Lavorazione:</strong> {{ quote.production_type.name }}</li>
+<li><strong>Data Preventivo:</strong> {{ quote.quote_date.strftime('%d/%m/%Y %H:%M:%S') }}</li>
+<li><strong>Scadenza Offerta:</strong> {{ quote.expiry_date.strftime('%d/%m/%Y') }}</li>
+</ul>
+
+<form method="POST" action="{{ url_for('send_quote_email', quote_id=quote.id) }}">
+<p>
+<label for="email">Inserisci l'email del destinatario per inviare la quotazione:</label>
+<input type="email" id="email" name="email" required>
+</p>
+<p><button type="submit">Invia Quotazione via Email</button></p>
+</form>
+
+{% else %}
+<p>Nessun preventivo disponibile.</p>
+{% endif %}
+
+<p><a href="{{ url_for('quote') }}">Richiedi un nuovo preventivo</a> | <a href="{{ url_for('index') }}">Torna alla homepage</a></p>
+</body>
+</html>
