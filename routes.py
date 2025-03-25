@@ -8,8 +8,8 @@ from . import app
 
 @app.route('/')
 def index():
-    # return render_template('index.html')
-    return "Allora funziona!"
+    return render_template('index.html')
+    # return "Allora funziona!"
 
 @app.route('/login', methods=['GET, POST'])
 def login():
