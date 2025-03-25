@@ -66,4 +66,13 @@ def admin_dashboard():
         return redirect(url_for('index'))
     return render_template('admin/dashboard.html')
 
+@app.route('/admin/users')
+@login_required
+def user_management():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    users = User.query.all()
+    return render_template('admin/user_management.html', users=users)
+
 # ... (Altre rotte per la gestione di utenti, materiali, lavorazioni, ecc.) ...
