@@ -24,7 +24,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Registrazione', form=form)
 
-@app.route('/login', methods=['GET, POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     # ... (Logica per la gestione del login) ...
     return render_template('login.html', title='Login')
@@ -34,7 +34,7 @@ def logout():
     # ... (Logica per la gestione del logout) ...
     return redirect(url_for('index'))
 
-@app.route('/quote', methods=['GET, POST'])
+@app.route('/quote', methods=['GET', 'POST'])
 @login_required
 def quote():
     form = QuoteForm()
