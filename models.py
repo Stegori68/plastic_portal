@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(50), nullable=False, default='user')
     quotes = db.relationship('Quote', backref='author', lazy=True)
-    logs = db.relationship('Log', backref='user', lazy=True)
+    logs = db.relationship('Log', backref='created_logs', lazy=True)
 
     def __repr__(self):
         return f"User('{self.email}', '{self.role}')"
