@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestione Utenti</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Gestione Utenti</h1>
+
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
+
+        <h2>Utenti Registrati</h2>
+        <ul>
+            {% for user in users %}
+            <li>{{ user.email }} ({{ user.role }})</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Aggiungi Nuovo Utente</h3>
+        <p><a href="{{ url_for('add_user') }}">Aggiungi Utente</a></p>
+
+        <h3>Modifica Utente</h3>
+        {# You'll need to implement links to edit users #}
+
+        <h3>Elimina Utente</h3>
+        {# You'll need to implement forms to delete users #}
+
+        {% else %}
+        <p>Accesso non autorizzato.</p>
+        <p><a href="{{ url_for('login') }}">Effettua il Login come Amministratore</a></p>
+        {% endif %}
+
+    </body>
+</html>
