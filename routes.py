@@ -101,6 +101,37 @@ def add_material():
         return redirect(url_for('material_management'))
     return render_template('admin/add_material.html', title='Aggiungi Materiale', form=form)
 
+@app.route('/admin/materials/edit/<int:material_id>', methods=['GET', 'POST'])
+@login_required
+def edit_material(material_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    material = Material.query.get_or_404(material_id)
+    form = MaterialForm(obj=material)
+    if form.validate_on_submit():
+        material.name = form.name.data
+        material.cost_per_unit = form.cost_per_unit.data
+        material.unit = form.unit.data
+        material.dimensions = form.dimensions.data
+        material.thickness = form.thickness.data
+        db.session.commit()
+        flash('Materiale modificato con successo!', 'success')
+        return redirect(url_for('material_management'))
+    return render_template('admin/edit_material.html', title='Modifica Materiale', form=form, material=material)
+
+@app.route('/admin/materials/delete/<int:material_id>', methods=['POST'])
+@login_required
+def delete_material(material_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    material = Material.query.get_or_404(material_id)
+    db.session.delete(material)
+    db.session.commit()
+    flash('Materiale eliminato con successo!', 'success')
+    return redirect(url_for('material_management'))
+
 @app.route('/admin/productions')
 @login_required
 def production_management():
