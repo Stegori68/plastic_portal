@@ -83,4 +83,15 @@ def material_management():
         return redirect(url_for('admin_dashboard'))
     materials = Material.query.all()
     return render_template('admin/material_management.html', materials=materials)
+
+@app.route('/admin/productions')
+@login_required
+def material_management():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    materials = Material.query.all()
+    return render_template('admin/production_management.html', productions=productions)
+
+
 # ... (Altre rotte per la gestione di utenti, materiali, lavorazioni, ecc.) ...
