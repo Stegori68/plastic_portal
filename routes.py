@@ -47,6 +47,8 @@ def logout():
 @login_required
 def quote():
     form = QuoteForm()
+    form.material_type.choices = [(material.id, material.name) for material in Material.query.all()]
+    form.production_type.choices = [(production.id, production.name) for production in Production.query.all()]
     if form.validate_on_submit():
         # ... (Logica per il calcolo del preventivo, nesting, ecc.) ...
         return redirect(url_for('quote_result', quote_id=new_quote.id))

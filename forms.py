@@ -15,11 +15,11 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrati')
 
 class QuoteForm(FlaskForm):
-    material_type = SelectField('Tipologia Materiale', validators='')
-    max_dimension = StringField('Dimensioni Massime Elemento', validators='')
-    quantity = IntegerField('Quantitativo Richiesto', validators='')
+    material_type = SelectField('Tipologia Materiale', validators=[DataRequired()], coerce=int)
+    max_dimension = StringField('Dimensioni Massime Elemento', validators=[DataRequired()])
+    quantity = IntegerField('Quantitativo Richiesto', validators=[DataRequired()])
     drawing = FileField('Disegno (PDF/DXF)')
-    production_type = SelectField('Tipologia Produzione', validators='')
+    production_type = SelectField('Tipologia Produzione', validators=[DataRequired()], coerce=int)
     submit = SubmitField('Calcola Preventivo')
 
 class MaterialForm(FlaskForm):
