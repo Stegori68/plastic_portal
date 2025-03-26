@@ -93,5 +93,14 @@ def production_management():
     materials = Material.query.all()
     return render_template('admin/production_management.html', productions=productions)
 
+@app.route('/admin/export')
+@login_required
+def export_data():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    # You'll likely want to fetch data from the database here
+    # and prepare it for export (e.g., as an Excel file)
+    return render_template('admin/export_data.html')
 
 # ... (Altre rotte per la gestione di utenti, materiali, lavorazioni, ecc.) ...
