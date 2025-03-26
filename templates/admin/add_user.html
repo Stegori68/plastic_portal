@@ -24,9 +24,11 @@
                 {% endfor %}
             </p>
             <p>
-                <label for="password">Password</label><br>
-                <input type="password" name="password" required><br>
-                <small>La password verrà hashata per sicurezza.</small>
+                {{ form.password.label }}<br>
+                {{ form.password() }}<br>
+                {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %} 
             </p>
             <p>{{ form.submit() }}</p>
         </form>

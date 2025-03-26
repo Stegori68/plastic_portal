@@ -39,4 +39,5 @@ class ProductionForm(FlaskForm):
 class UserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     role = SelectField('Ruolo', choices=[('user', 'Utente'), ('admin', 'Amministratore')], validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Salva Utente')
