@@ -86,7 +86,7 @@ def material_management():
 
 @app.route('/admin/productions')
 @login_required
-def material_management():
+def production_management():
     if current_user.role != 'admin':
         flash('Accesso non autorizzato.', 'danger')
         return redirect(url_for('admin_dashboard'))
