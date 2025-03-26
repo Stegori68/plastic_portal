@@ -77,6 +77,22 @@ def user_management():
     users = User.query.all()
     return render_template('admin/user_management.html', users=users)
 
+@app.route('/admin/users/add', methods=['GET', 'POST'])
+@login_required
+def add_user():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    form = UserForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        new_user = User(email=form.email.data, password=hashed_password, role=form.role.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Utente aggiunto con successo!', 'success')
+        return redirect(url_for('user_management'))
+    return render_template('admin/add_user.html', title='Aggiungi Utente', form=form)
+
 @app.route('/admin/materials')
 @login_required
 def material_management():
