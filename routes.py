@@ -84,6 +84,23 @@ def material_management():
     materials = Material.query.all()
     return render_template('admin/material_management.html', materials=materials)
 
+@app.route('/admin/materials/add', methods=['GET', 'POST'])
+@login_required
+def add_material():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    form = MaterialForm()
+    if form.validate_on_submit():
+        new_material = Material(name=form.name.data, cost_per_unit=form.cost_per_unit.data,
+        unit=form.unit.data, dimensions=form.dimensions.data,
+        thickness=form.thickness.data)
+        db.session.add(new_material)
+        db.session.commit()
+        flash('Materiale aggiunto con successo!', 'success')
+        return redirect(url_for('material_management'))
+    return render_template('admin/add_material.html', title='Aggiungi Materiale', form=form)
+
 @app.route('/admin/productions')
 @login_required
 def production_management():
