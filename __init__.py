@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from .config import Config
+from .models import User, Material
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -16,4 +17,3 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 from . import routes, models
-from .models import User
