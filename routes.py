@@ -159,7 +159,7 @@ def production_management():
     if current_user.role != 'admin':
         flash('Accesso non autorizzato.', 'danger')
         return redirect(url_for('admin_dashboard'))
-    materials = Material.query.all()
+    productions = Production.query.all()
     return render_template('admin/production_management.html', productions=productions)
 
 @app.route('/admin/export')
