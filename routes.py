@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
 from . import app
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.exc import IntegrityErro
+from sqlalchemy.exc import IntegrityError
 
 @app.route('/')
 def index():
