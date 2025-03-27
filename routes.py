@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, current_app
 from plastic_portal import app, db
 from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
 from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm
@@ -11,6 +11,8 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 import os
 import decimal
+from flask_mail import Message
+from plastic_portal import mail
 
 @app.route('/')
 def index():
@@ -451,3 +453,39 @@ def delete_brand(brand_id):
     db.session.commit()
     flash('Marca eliminata con successo!', 'success')
     return redirect(url_for('brand_management'))
+
+@app.route('/send_quote_email', methods=['POST'])
+@login_required
+def send_quote_email():
+    material_id = request.form.get('material_id')
+    element_dimension_x = request.form.get('element_dimension_x')
+    element_dimension_y = request.form.get('element_dimension_y')
+    quantity_requested = request.form.get('quantity_requested')
+    production_type = request.form.get('production_type')
+    recipient_email = request.form.get('email')
+
+    material = Material.query.get(material_id)
+
+    # Crea il corpo dell'email con i dettagli del preventivo
+    body = f"Preventivo per {material.brand.name} - {material.category.name} - {material.name}\n\n"
+    body += f"Dimensioni elemento: {element_dimension_x}mm x {element_dimension_y}mm\n"
+    body += f"Quantitativo richiesto: {quantity_requested}\n"
+    body += f"Tipologia di produzione: {production_type}\n\n"
+
+    # Aggiungi i risultati del preventivo al corpo dell'email (assumendo che siano disponibili)
+    results = request.form.get('results') # Dovresti passare i risultati dal template, al form.
+    if results:
+        body += "Risultati del preventivo:\n"
+        # Qui dovresti formattare i risultati in modo appropriato
+        body += str(results)
+
+    msg = Message("Preventivo Richiesto", recipients=[recipient_email])
+    msg.body = body
+
+    try:
+        mail.send(msg)
+        flash("Preventivo inviato con successo!", "success")
+    except Exception as e:
+        flash(f"Si è verificato un errore durante l'invio dell'email: {e}", "danger")
+
+    return redirect(url_for('quote'))
