@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 import os
+import decimal
 
 @app.route('/')
 def index():
@@ -83,7 +84,7 @@ def quote():
 
         material = Material.query.get_or_404(material_id)
         profit_margin_setting = Setting.query.filter_by(name='profit_margin').first()
-        profit_margin = float(profit_margin_setting.value) if profit_margin_setting else 0.20
+        profit_margin = decimal.Decimal(profit_margin_setting.value) if profit_margin_setting else decimal.Decimal('0.20')
 
         results = []
 
@@ -145,8 +146,8 @@ def quote():
                     cost_material = (material.cost_per_unit * num_sheets_needed) / total_elements if total_elements > 0 else 0
                     cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
-                    selling_price_no_tooling = cost_per_element_no_tooling * (1 + profit_margin)
-                    selling_price_with_tooling = cost_per_element_with_tooling * (1 + profit_margin)
+                    selling_price_no_tooling = cost_per_element_no_tooling / (1 - profit_margin)
+                    selling_price_with_tooling = cost_per_element_with_tooling / (1 - profit_margin)
 
                     result = {
                         'method': method_name,
