@@ -1,11 +1,13 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from plastic_portal import app, db
-from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm, UserForm
+from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
+from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm
 from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
 from . import app
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.exc import IntegrityErro
 
 @app.route('/')
 def index():
