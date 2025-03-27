@@ -178,6 +178,35 @@ def add_production():
         return redirect(url_for('production_management'))
     return render_template('admin/add_production.html', title='Aggiungi Lavorazione', form=form)
 
+@app.route('/admin/productions/edit/<int:production_id>', methods=['GET', 'POST'])
+@login_required
+def edit_production(production_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    production = Production.query.get_or_404(production_id)
+    form = ProductionForm(obj=production)
+    if form.validate_on_submit():
+        production.name = form.name.data
+        production.setup_cost = form.setup_cost.data
+        production.cutting_cost_per_sheet = form.cutting_cost_per_sheet.data
+        db.session.commit()
+        flash('Lavorazione modificata con successo!', 'success')
+        return redirect(url_for('production_management'))
+    return render_template('admin/edit_production.html', title='Modifica Lavorazione', form=form, production=production)
+
+@app.route('/admin/productions/delete/<int:production_id>', methods=['POST'])
+@login_required
+def delete_production(production_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    production = Production.query.get_or_404(production_id)
+    db.session.delete(production)
+    db.session.commit()
+    flash('Lavorazione eliminata con successo!', 'success')
+    return redirect(url_for('production_management'))
+
 @app.route('/admin/export')
 @login_required
 def export_data():
