@@ -8,45 +8,76 @@
         <h1>{{ title }}</h1>
         <form method="POST" action="{{ url_for('quote') }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            <p>
-                {{ form.material_type.label }}<br>
-                {{ form.material_type() }}<br>
+            <div class="mb-3">
+                {{ form.material_type.label(class="form-label") }}
+                {{ form.material_type(class="form-select") }}
                 {% for error in form.material_type.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                    <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-            </p>
-            <p>
-                {{ form.max_dimension.label }}<br>
-                {{ form.max_dimension() }}<br>
-                <small>Indicare le dimensioni massime dell'elemento finito (es. 100x50 mm).</small><br>
-                {% for error in form.max_dimension.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+            </div>
+            <div class="mb-3">
+                {{ form.element_dimension_x.label(class="form-label") }}
+                {{ form.element_dimension_x(class="form-control") }}
+                {% for error in form.element_dimension_x.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-            </p>
-            <p>
-                {{ form.quantity.label }}<br>
-                {{ form.quantity() }}<br>
+            </div>
+            <div class="mb-3">
+                {{ form.element_dimension_y.label(class="form-label") }}
+                {{ form.element_dimension_y(class="form-control") }}
+                {% for error in form.element_dimension_y.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.quantity.label(class="form-label") }}
+                {{ form.quantity(class="form-control") }}
                 {% for error in form.quantity.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                    <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-            </p>
-            <p>
-                {{ form.drawing.label }}<br>
-                {{ form.drawing() }}<br>
-                <small>Caricare un disegno in formato PDF o DXF.</small><br>
+            </div>
+            <div class="mb-3">
+                {{ form.drawing.label(class="form-label") }}
+                {{ form.drawing(class="form-control") }}
                 {% for error in form.drawing.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                    <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-            </p>
-            <p>
-                {{ form.production_type.label }}<br>
-                {{ form.production_type() }}<br>
+            </div>
+            <div class="mb-3">
+                {{ form.production_type.label(class="form-label") }}
+                {{ form.production_type(class="form-select") }}
                 {% for error in form.production_type.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                    <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-            </p>
-            <p>{{ form.submit() }}</p>
-            </form>
+            </div>
+            <div class="mb-3" id="fustella_productions_field" style="display: none;">
+                {{ form.fustella_productions.label(class="form-label") }}
+                {{ form.fustella_productions(class="form-control") }}
+                {% for error in form.fustella_productions.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Calcola Preventivo</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Annulla</a>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const productionTypeSelect = document.getElementById('production_type');
+                const fustellaProductionsField = document.getElementById('fustella_productions_field');
+    
+                function toggleFustellaProductions() {
+                    const selectedValue = productionTypeSelect.value;
+                    if (selectedValue === 'best' || selectedValue === 'compare') {
+                        fustellaProductionsField.style.display = 'block';
+                    } else {
+                        fustellaProductionsField.style.display = 'none';
+                    }
+                }
+    
+                productionTypeSelect.addEventListener('change', toggleFustellaProductions);
+                toggleFustellaProductions(); // Initial call to set visibility on page load
+            });
+        </script>
         <p><a href="{{ url_for('index') }}">Torna alla homepage</a></p>
     </body>
 </html>

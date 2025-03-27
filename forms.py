@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, IntegerField, DecimalField, SelectField, FileField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, ValidationError
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -16,11 +16,18 @@ class RegistrationForm(FlaskForm):
 
 class QuoteForm(FlaskForm):
     material_type = SelectField('Tipologia Materiale', validators=[DataRequired()], coerce=int)
-    max_dimension = StringField('Dimensioni Massime Elemento', validators=[DataRequired()])
-    quantity = IntegerField('Quantitativo Richiesto', validators=[DataRequired()])
+    element_dimension_x = DecimalField('Dimensione Massima Elemento X (mm)', validators=[DataRequired(), NumberRange(min=0)])
+    element_dimension_y = DecimalField('Dimensione Massima Elemento Y (mm)', validators=[DataRequired(), NumberRange(min=0)])
+    quantity = IntegerField('Quantitativo Richiesto', validators=[DataRequired(), NumberRange(min=1)])
     drawing = FileField('Disegno (PDF/DXF)')
-    production_type = SelectField('Tipologia Produzione', validators=[DataRequired()], coerce=int)
+    production_type = SelectField('Tipologia Produzione', validators=[DataRequired()])
+    fustella_productions = IntegerField('Numero di Produzioni per Ammortizzare la Fustella', validators=[NumberRange(min=1)], default=4)
     submit = SubmitField('Calcola Preventivo')
+
+    def validate_drawing(form, field):
+        if field.data:
+            if not field.data.filename.lower().endswith(('.pdf', '.dxf')):
+                raise ValidationError('Formato file non valido. Si prega di caricare un file PDF o DXF.')
 
 class MaterialForm(FlaskForm):
     name = StringField('Nome Materiale', validators=[DataRequired()])

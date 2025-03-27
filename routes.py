@@ -2,12 +2,14 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from plastic_portal import app, db
 from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
 from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm
-from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand
+from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand, Setting
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
 from . import app
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
+import os
 
 @app.route('/')
 def index():
@@ -45,16 +47,127 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# @app.route('/quote', methods=['GET', 'POST'])
+# @login_required
+# def quote():
+#     form = QuoteForm()
+#     materials = Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()
+#     form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name} (sp. {material.thickness} mm)") for material in materials]
+#     form.production_type.choices = [(production.id, production.name) for production in Production.query.all()]
+#     if form.validate_on_submit():
+#         # ... (Logica per il calcolo del preventivo, nesting, ecc.) ...
+#         return redirect(url_for('quote_result', quote_id=new_quote.id))
+#     return render_template('quote_form.html', title='Preventivo', form=form)
+
 @app.route('/quote', methods=['GET', 'POST'])
 @login_required
 def quote():
     form = QuoteForm()
-    materials = Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()
-    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name} (sp. {material.thickness} mm)") for material in materials]
-    form.production_type.choices = [(production.id, production.name) for production in Production.query.all()]
+    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name}") for material in Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()]
+    form.production_type.choices = [
+        ('best', 'Valuta la soluzione più conveniente'),
+        ('compare', 'Confronta più soluzioni'),
+        ('Taglio passante a plotter', 'Taglio passante a plotter'),
+        ('Taglio passante a fustella testa piana', 'Taglio passante a fustella testa piana'),
+        ('Mezzo taglio a rotativa', 'Mezzo taglio a rotativa')
+    ]
+
     if form.validate_on_submit():
-        # ... (Logica per il calcolo del preventivo, nesting, ecc.) ...
-        return redirect(url_for('quote_result', quote_id=new_quote.id))
+        material_id = form.material_type.data
+        element_dimension_x = form.element_dimension_x.data
+        element_dimension_y = form.element_dimension_y.data
+        quantity_requested = form.quantity.data
+        drawing_file = form.drawing.data
+        production_type_choice = form.production_type.data
+        fustella_productions = form.fustella_productions.data
+
+        material = Material.query.get_or_404(material_id)
+        profit_margin_setting = Setting.query.filter_by(name='profit_margin').first()
+        profit_margin = float(profit_margin_setting.value) if profit_margin_setting else 0.20
+
+        results = []
+
+        production_methods = []
+        if production_type_choice == 'best' or production_type_choice == 'compare':
+            production_methods = [
+                'Taglio passante a plotter',
+                'Taglio passante a fustella testa piana',
+                'Mezzo taglio a rotativa'
+            ]
+        else:
+            production_methods = [production_type_choice]
+
+        for method_name in production_methods:
+            production = Production.query.filter_by(name=method_name).first()
+            if production:
+                setup_cost = production.setup_cost
+                cutting_cost_per_sheet = production.cutting_cost_per_sheet
+
+                # --- Placeholder for reading drawing and getting shape ---
+                element_width = element_dimension_x
+                element_height = element_dimension_y
+                if drawing_file:
+                    filename = secure_filename(drawing_file.filename)
+                    # Save the file temporarily (you might want to process it without saving)
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    drawing_file.save(file_path)
+                    # --- Implement logic in utils/pdf_dxf_parser.py to extract dimensions ---
+                    # extracted_dimensions = extract_dimensions(file_path)
+                    # if extracted_dimensions:
+                    #     element_width = extracted_dimensions['width']
+                    #     element_height = extracted_dimensions['height']
+                    # os.remove(file_path) # Clean up the temporary file
+                    pass # Replace with actual drawing processing
+
+                # --- Placeholder for nesting logic in utils/nesting_utils.py ---
+                sheet_width = material.width
+                sheet_length = material.length
+                elements_per_sheet = 1 # Replace with actual nesting calculation
+                # elements_per_sheet = perform_nesting(element_width, element_height, sheet_width, sheet_length)
+
+                if elements_per_sheet > 0:
+                    num_sheets_needed_exact = quantity_requested / elements_per_sheet
+                    num_sheets_needed = int(num_sheets_needed_exact) + (1 if num_sheets_needed_exact > int(num_sheets_needed_exact) else 0)
+                    order_multiple = elements_per_sheet
+                    total_elements = order_multiple * num_sheets_needed
+
+                    # --- Calculate Costs ---
+                    tooling_cost = 0
+                    tooling_cost_per_production = 0
+                    if method_name.startswith("Taglio passante a fustella") or method_name.startswith("Mezzo taglio a fustella"):
+                        fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
+                        tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
+                        tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
+                        tooling_cost_per_production = tooling_cost / fustella_productions if fustella_productions > 0 else tooling_cost
+
+                    cost_total_production_no_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed) / total_elements if total_elements > 0 else 0
+                    cost_total_production_with_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed + tooling_cost_per_production) / total_elements if total_elements > 0 else 0
+                    cost_material = (material.cost_per_unit * num_sheets_needed) / total_elements if total_elements > 0 else 0
+                    cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
+                    cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
+                    selling_price_no_tooling = cost_per_element_no_tooling * (1 + profit_margin)
+                    selling_price_with_tooling = cost_per_element_with_tooling * (1 + profit_margin)
+
+                    result = {
+                        'method': method_name,
+                        'order_quantity': total_elements,
+                        'cost_production': cost_total_production_no_tooling,
+                        'cost_material': cost_material,
+                        'cost_element': cost_per_element_no_tooling,
+                        'selling_price': selling_price_no_tooling,
+                        'elements_per_sheet': elements_per_sheet,
+                        'num_sheets': num_sheets_needed,
+                        'tooling_cost_expressed': tooling_cost_expressed if 'tooling_cost_expressed' in locals() else None,
+                        'tooling_cost_distributed': tooling_cost_per_production if tooling_cost > 0 else None
+                    }
+                    results.append(result)
+
+        if production_type_choice == 'best':
+            best_result = min(results, key=lambda x: x['cost_element']) if results else None
+            return render_template('quote_result.html', title='Risultato Preventivo', results=[best_result], quantity_requested=quantity_requested, material=material)
+        else:
+            return render_template('quote_result.html', title='Risultato Preventivo', results=results, quantity_requested=quantity_requested, material=material)
+
     return render_template('quote_form.html', title='Preventivo', form=form)
 
 @app.route('/quote/<int:quote_id>')
