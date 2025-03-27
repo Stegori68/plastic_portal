@@ -31,11 +31,11 @@ class MaterialForm(FlaskForm):
     thickness = DecimalField('Spessore (mm)')
     currency = SelectField('Valuta', choices=[('EUR', 'Euro'), ('USD', 'Dollaro USA'), ('CNY', 'Yuan Cinese'), ('Altro', 'Altro')])
     submit = SubmitField('Salva Materiale')
-    
+
 class ProductionForm(FlaskForm):
-    name = StringField('Nome Lavorazione', validators='')
-    setup_cost = DecimalField('Costo Setup', validators='')
-    cutting_cost_per_sheet = DecimalField('Costo Taglio per Lastra', validators='')
+    name = StringField('Nome Lavorazione', validators=[DataRequired()])
+    setup_cost = DecimalField('Costo Setup', validators[DataRequired()])
+    cutting_cost_per_sheet = DecimalField('Costo Taglio per Lastra', validators=[DataRequired()])
     submit = SubmitField('Salva Lavorazione')
 
 class UserForm(FlaskForm):

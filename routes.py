@@ -162,6 +162,22 @@ def production_management():
     productions = Production.query.all()
     return render_template('admin/production_management.html', productions=productions)
 
+@app.route('/admin/productions/add', methods=['GET', 'POST'])
+@login_required
+def add_production():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    form = ProductionForm()
+    if form.validate_on_submit():
+        new_production = Production(name=form.name.data, setup_cost=form.setup_cost.data,
+        cutting_cost_per_sheet=form.cutting_cost_per_sheet.data)
+        db.session.add(new_production)
+        db.session.commit()
+        flash('Lavorazione aggiunta con successo!', 'success')
+        return redirect(url_for('production_management'))
+    return render_template('admin/add_production.html', title='Aggiungi Lavorazione', form=form)
+
 @app.route('/admin/export')
 @login_required
 def export_data():
