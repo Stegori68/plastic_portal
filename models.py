@@ -42,6 +42,8 @@ class Material(db.Model):
     length = db.Column(db.Numeric(10, 2)) # Added length
     thickness = db.Column(db.Numeric(5, 2))
     currency = db.Column(db.String(10))
+    category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
+    brand_id = db.Column(db.Integer, db.ForeignKey('product_brands.id'))
     quotes = db.relationship('Quote', backref='related_quotes', lazy=True)
 
     def __repr__(self):
