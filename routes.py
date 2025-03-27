@@ -48,7 +48,7 @@ def logout():
 def quote():
     form = QuoteForm()
     materials = Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()
-    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name}") for material in materials]
+    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name} (spessore {material.thickness})") for material in materials]
     form.production_type.choices = [(production.id, production.name) for production in Production.query.all()]
     if form.validate_on_submit():
         # ... (Logica per il calcolo del preventivo, nesting, ecc.) ...
