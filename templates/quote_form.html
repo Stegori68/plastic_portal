@@ -1,52 +1,52 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>{{ title }}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-<h1>{{ title }}</h1>
-<form method="POST" action="{{ url_for('quote') }}" enctype="multipart/form-data">
-{{ form.hidden_tag() }}
-<p>
-{{ form.material_type.label }}<br>
-{{ form.material_type() }}<br>
-{% for error in form.material_type.errors %}
-<span style="color: red;">[{{ error }}]</span>
-{% endfor %}
-</p>
-<p>
-{{ form.max_dimension.label }}<br>
-{{ form.max_dimension() }}<br>
-<small>Indicare le dimensioni massime dell'elemento finito (es. 100x50 mm).</small><br>
-{% for error in form.max_dimension.errors %}
-<span style="color: red;">[{{ error }}]</span>
-{% endfor %}
-</p>
-<p>
-{{ form.quantity.label }}<br>
-{{ form.quantity() }}<br>
-{% for error in form.quantity.errors %}
-<span style="color: red;">[{{ error }}]</span>
-{% endfor %}
-</p>
-<p>
-{{ form.drawing.label }}<br>
-{{ form.drawing() }}<br>
-<small>Caricare un disegno in formato PDF o DXF.</small><br>
-{% for error in form.drawing.errors %}
-<span style="color: red;">[{{ error }}]</span>
-{% endfor %}
-</p>
-<p>
-{{ form.production_type.label }}<br>
-{{ form.production_type() }}<br>
-{% for error in form.production_type.errors %}
-<span style="color: red;">[{{ error }}]</span>
-{% endfor %}
-</p>
-<p>{{ form.submit() }}</p>
-</form>
-<p><a href="{{ url_for('index') }}">Torna alla homepage</a></p>
-</body>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <form method="POST" action="{{ url_for('quote') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.material_type.label }}<br>
+                {{ form.material_type() }}<br>
+                {% for error in form.material_type.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.max_dimension.label }}<br>
+                {{ form.max_dimension() }}<br>
+                <small>Indicare le dimensioni massime dell'elemento finito (es. 100x50 mm).</small><br>
+                {% for error in form.max_dimension.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.quantity.label }}<br>
+                {{ form.quantity() }}<br>
+                {% for error in form.quantity.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.drawing.label }}<br>
+                {{ form.drawing() }}<br>
+                <small>Caricare un disegno in formato PDF o DXF.</small><br>
+                {% for error in form.drawing.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.production_type.label }}<br>
+                {{ form.production_type() }}<br>
+                {% for error in form.production_type.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+            </form>
+        <p><a href="{{ url_for('index') }}">Torna alla homepage</a></p>
+    </body>
 </html>
