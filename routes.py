@@ -101,7 +101,7 @@ def quote():
         for method_name in production_methods:
             production = Production.query.filter_by(name=method_name).first()
             if production:
-                setup_cost = production.setup_cost
+                setup_cost = decimal.Decimal(str(production.setup_cost))
                 cutting_cost_per_sheet = decimal.Decimal(str(production.cutting_cost_per_sheet))
 
                 # --- Placeholder for reading drawing and getting shape ---
