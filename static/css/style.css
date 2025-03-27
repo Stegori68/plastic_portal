@@ -1,4 +1,221 @@
-/* Stili CSS personalizzati */
+/* Stili generali */
 body {
-    font-family: sans-serif;
-}
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    }
+    
+    .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1, h2, h3 {
+    color: #007bff;
+    margin-bottom: 15px;
+    }
+    
+    h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-top: 0;
+    }
+    
+    h2 {
+    font-size: 2em;
+    }
+    
+    h3 {
+    font-size: 1.6em;
+    }
+    
+    p {
+    margin-bottom: 10px;
+    }
+    
+    a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    }
+    
+    a:hover {
+    color: #0056b3;
+    }
+    
+    ul {
+    list-style: none;
+    padding: 0;
+    }
+    
+    ul li {
+    margin-bottom: 8px;
+    }
+    
+    /* Stili per la navigazione (se hai una navbar) */
+    nav {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    }
+    
+    nav ul {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    }
+    
+    nav ul li {
+    margin: 0 15px;
+    }
+    
+    nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    }
+    
+    nav ul li a:hover {
+    color: #f8f9fa;
+    }
+    
+    /* Stili per i form */
+    form {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    }
+    
+    label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="decimal"],
+    select,
+    textarea,
+    input[type="file"] {
+    width: calc(100% - 12px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+    
+    select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23343a40" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 50%;
+    background-size: 0.8em;
+    }
+    
+    button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    }
+    
+    button[type="submit"]:hover {
+    background-color: #0056b3;
+    }
+    
+    .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    }
+    
+    /* Stili specifici per la gestione admin */
+    .admin-link {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+    }
+    
+    .admin-link:hover {
+    background-color: #e0e0e0;
+    }
+    
+    /* Stili per la visualizzazione dei risultati del preventivo */
+    .quote-result {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #e9ecef;
+    }
+    
+    .quote-result h2 {
+    color: #28a745;
+    }
+    
+    .quote-result p strong {
+    font-weight: bold;
+    }
+    
+    /* Stili per le tabelle (se le usi) */
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    }
+    
+    th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    }
+    
+    th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    }
+    
+    /* Stili per i messaggi flash */
+    .flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    }
+    
+    .flash-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    }
