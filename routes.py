@@ -111,8 +111,9 @@ def add_material():
     form = MaterialForm()
     if form.validate_on_submit():
         new_material = Material(name=form.name.data, cost_per_unit=form.cost_per_unit.data,
-        unit=form.unit.data, dimensions=form.dimensions.data,
-        thickness=form.thickness.data)
+        unit=form.unit.data, width=form.width.data,
+        length=form.length.data, thickness=form.thickness.data,
+        currency=form.currency.data)
         db.session.add(new_material)
         db.session.commit()
         flash('Materiale aggiunto con successo!', 'success')
@@ -131,8 +132,10 @@ def edit_material(material_id):
         material.name = form.name.data
         material.cost_per_unit = form.cost_per_unit.data
         material.unit = form.unit.data
-        material.dimensions = form.dimensions.data
+        material.width = form.width.data 
+        material.length = form.length.data 
         material.thickness = form.thickness.data
+        material.currency = form.currency.data 
         db.session.commit()
         flash('Materiale modificato con successo!', 'success')
         return redirect(url_for('material_management'))
