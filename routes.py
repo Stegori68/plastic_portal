@@ -131,6 +131,8 @@ def quote():
                     num_sheets_needed = int(num_sheets_needed_exact) + (1 if num_sheets_needed_exact > int(num_sheets_needed_exact) else 0)
                     order_multiple = elements_per_sheet
                     total_elements = order_multiple * num_sheets_needed
+                    num_sheets_needed_decimal = decimal.Decimal(str(num_sheets_needed))
+                    total_elements_decimal = decimal.Decimal(str(total_elements))
 
                     # --- Calculate Costs ---
                     tooling_cost = 0
@@ -141,8 +143,8 @@ def quote():
                         tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
                         tooling_cost_per_production = tooling_cost / fustella_productions if fustella_productions > 0 else tooling_cost
 
-                    cost_total_production_no_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed) / total_elements if total_elements > 0 else 0
-                    cost_total_production_with_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed + tooling_cost_per_production) / total_elements if total_elements > 0 else 0
+                    cost_total_production_with_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed_decimal + tooling_cost_per_production) / total_elements_decimal if total_elements_decimal > 0 else 0
+                    cost_total_production_no_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed_decimal) / total_elements_decimal if total_elements_decimal > 0 else 0
                     cost_material = (material.cost_per_unit * num_sheets_needed) / total_elements if total_elements > 0 else 0
                     cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
