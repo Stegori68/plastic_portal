@@ -14,6 +14,24 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"User('{self.email}', '{self.role}')"
 
+class ProductCategory(db.Model):
+    __tablename__ = 'product_categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    materials = db.relationship('Material', backref='category', lazy=True)
+
+    def __repr__(self):
+        return f"ProductCategory('{self.name}')"
+
+class ProductBrand(db.Model):
+    __tablename__ = 'product_brands'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    materials = db.relationship('Material', backref='brand', lazy=True)
+
+    def __repr__(self):
+        return f"ProductBrand('{self.name}')"
+
 class Material(db.Model):
     __tablename__ = 'materials'
     id = db.Column(db.Integer, primary_key=True)

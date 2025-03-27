@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Gestione Materiali</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+    <head>
+        <title>Gestione Materiali</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
     <body>
         <h1>Gestione Materiali</h1>
 
@@ -11,25 +11,51 @@
         <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
 
         <h2>Materiali Disponibili</h2>
-        <ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Costo per Unità</th>
+                    <th>Unità</th>
+                    <th>Larghezza (mm)</th>
+                    <th>Lunghezza (mm)</th>
+                    <th>Spessore (mm)</th>
+                    <th>Valuta</th>
+                    <th>Categoria</th>
+                    <th>Marca</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for material in materials %}
-            <li>
-                {{ material.name }} - Costo: {{ material.currency }} {{ material.cost_per_unit }} - {{ material.width }}x{{ material.length }}x{{ material.thickness }}mm 
-                <a href="{{ url_for('edit_material', material_id=material.id) }}">Modifica</a>
-                <form method="POST" action="{{ url_for('delete_material', material_id=material.id) }}" style="display: inline;">
-                    <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?')">Elimina</button>
-                </form>
-            </li>
+                <tr>
+                    <td>{{ material.name }}</td>
+                    <td>{{ material.cost_per_unit }}</td>
+                    <td>{{ material.unit }}</td>
+                    <td>{{ material.width }}</td>
+                    <td>{{ material.length }}</td>
+                    <td>{{ material.thickness }}</td>
+                    <td>{{ material.currency }}</td>
+                    <td>{{ material.category.name if material.category }}</td>
+                    <td>{{ material.brand.name if material.brand }}</td>
+                    <td>
+                    <a href="{{ url_for('edit_material', material_id=material.id) }}">Modifica</a>
+                    <form method="POST" action="{{ url_for('delete_material', material_id=material.id) }}" style="display: inline;">
+                        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?')">Elimina</button>
+                    </form>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
 
         <h3>Aggiungi Nuovo Materiale</h3>
         <p><a href="{{ url_for('add_material') }}">Aggiungi Materiale</a></p>
-        
+
         {% else %}
         <p>Accesso non autorizzato.</p>
         <p><a href="{{ url_for('login') }}">Effettua il Login come Amministratore</a></p>
         {% endif %}
-        
+
     </body>
 </html>

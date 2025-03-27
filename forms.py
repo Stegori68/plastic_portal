@@ -30,6 +30,8 @@ class MaterialForm(FlaskForm):
     length = DecimalField('Lunghezza (mm)', validators=[DataRequired()])
     thickness = DecimalField('Spessore (mm)')
     currency = SelectField('Valuta', choices=[('EUR', 'Euro'), ('USD', 'Dollaro USA'), ('CNY', 'Yuan Cinese'), ('Altro', 'Altro')])
+    category = SelectField('Categoria Prodotto', validators=[DataRequired()], coerce=int)
+    brand = SelectField('Marca Prodotto', validators=[DataRequired()], coerce=int)
     submit = SubmitField('Salva Materiale')
 
 class ProductionForm(FlaskForm):

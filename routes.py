@@ -47,7 +47,8 @@ def logout():
 @login_required
 def quote():
     form = QuoteForm()
-    form.material_type.choices = [(material.id, material.name) for material in Material.query.all()]
+    materials = Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()
+    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name}") for material in materials]
     form.production_type.choices = [(production.id, production.name) for production in Production.query.all()]
     if form.validate_on_submit():
         # ... (Logica per il calcolo del preventivo, nesting, ecc.) ...
@@ -109,11 +110,14 @@ def add_material():
         flash('Accesso non autorizzato.', 'danger')
         return redirect(url_for('admin_dashboard'))
     form = MaterialForm()
+    form.category.choices = [(category.id, category.name) for category in ProductCategory.query.all()]
+    form.brand.choices = [(brand.id, brand.name) for brand in ProductBrand.query.all()]
     if form.validate_on_submit():
         new_material = Material(name=form.name.data, cost_per_unit=form.cost_per_unit.data,
         unit=form.unit.data, width=form.width.data,
         length=form.length.data, thickness=form.thickness.data,
-        currency=form.currency.data)
+        currency=form.currency.data,
+        brand_id=form.brand.data)
         db.session.add(new_material)
         db.session.commit()
         flash('Materiale aggiunto con successo!', 'success')
@@ -128,6 +132,8 @@ def edit_material(material_id):
         return redirect(url_for('admin_dashboard'))
     material = Material.query.get_or_404(material_id)
     form = MaterialForm(obj=material)
+    form.category.choices = [(category.id, category.name) for category in ProductCategory.query.all()]
+    form.brand.choices = [(brand.id, brand.name) for brand in ProductBrand.query.all()]
     if form.validate_on_submit():
         material.name = form.name.data
         material.cost_per_unit = form.cost_per_unit.data
@@ -136,6 +142,8 @@ def edit_material(material_id):
         material.length = form.length.data 
         material.thickness = form.thickness.data
         material.currency = form.currency.data 
+        material.category_id = form.category.data
+        material.brand_id = form.brand.data
         db.session.commit()
         flash('Materiale modificato con successo!', 'success')
         return redirect(url_for('material_management'))
