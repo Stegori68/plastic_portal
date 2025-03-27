@@ -20,8 +20,10 @@ class Material(db.Model):
     name = db.Column(db.String(255), nullable=False)
     cost_per_unit = db.Column(db.Numeric(10, 2), nullable=False)
     unit = db.Column(db.String(50), nullable=False)
-    dimensions = db.Column(db.String(255))
+    width = db.Column(db.Numeric(10, 2)) # Added width
+    length = db.Column(db.Numeric(10, 2)) # Added length
     thickness = db.Column(db.Numeric(5, 2))
+    currency = db.Column(db.String(10))
     quotes = db.relationship('Quote', backref='related_quotes', lazy=True)
 
     def __repr__(self):
