@@ -34,7 +34,7 @@ class MaterialForm(FlaskForm):
 
 class ProductionForm(FlaskForm):
     name = StringField('Nome Lavorazione', validators=[DataRequired()])
-    setup_cost = DecimalField('Costo Setup', validators[DataRequired()])
+    setup_cost = DecimalField('Costo Setup', validators=[DataRequired()])
     cutting_cost_per_sheet = DecimalField('Costo Taglio per Lastra', validators=[DataRequired()])
     submit = SubmitField('Salva Lavorazione')
 
