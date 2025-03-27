@@ -23,13 +23,15 @@ class QuoteForm(FlaskForm):
     submit = SubmitField('Calcola Preventivo')
 
 class MaterialForm(FlaskForm):
-    name = StringField('Nome Materiale', validators='')
-    cost_per_unit = DecimalField('Costo per Unità', validators='')
-    unit = StringField('Unità', validators='')
-    dimensions = StringField('Dimensioni')
-    thickness = DecimalField('Spessore')
+    name = StringField('Nome Materiale', validators=[DataRequired()])
+    cost_per_unit = DecimalField('Costo per Unità', validators=[DataRequired()])
+    unit = StringField('Unità', validators=[DataRequired()])
+    width = DecimalField('Larghezza (mm)', validators=[DataRequired()])
+    length = DecimalField('Lunghezza (mm)', validators=[DataRequired()])
+    thickness = DecimalField('Spessore (mm)')
+    currency = SelectField('Valuta', choices=[('EUR', 'Euro'), ('USD', 'Dollaro USA'), ('CNY', 'Yuan Cinese'), ('Altro', 'Altro')])
     submit = SubmitField('Salva Materiale')
-
+    
 class ProductionForm(FlaskForm):
     name = StringField('Nome Lavorazione', validators='')
     setup_cost = DecimalField('Costo Setup', validators='')
