@@ -137,14 +137,16 @@ def quote():
                     # --- Calculate Costs ---
                     tooling_cost = 0
                     tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production)) if 'tooling_cost_per_production' in locals() and tooling_cost_per_production is not None else decimal.Decimal('0')
+                    cutting_cost_times_sheets = cutting_cost_per_sheet * num_sheets_needed_decimal
+                    cutting_cost_times_sheets = decimal.Decimal(str(cutting_cost_times_sheets))
                     if method_name.startswith("Taglio passante a fustella") or method_name.startswith("Mezzo taglio a fustella"):
                         fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
                         tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
                         tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
                         tooling_cost_per_production = tooling_cost / fustella_productions if fustella_productions > 0 else tooling_cost
 
-                    cost_total_production_with_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed_decimal + tooling_cost_per_production) / total_elements_decimal if total_elements_decimal > 0 else 0
-                    cost_total_production_no_tooling = (setup_cost + cutting_cost_per_sheet * num_sheets_needed_decimal) / total_elements_decimal if total_elements_decimal > 0 else 0
+                    cost_total_production_with_tooling = (setup_cost + cutting_cost_times_sheets + tooling_cost_per_production) / total_elements_decimal if total_elements_decimal > 0 else 0
+                    cost_total_production_no_tooling = (setup_cost + cutting_cost_times_sheets) / total_elements_decimal if total_elements_decimal > 0 else 0
                     cost_material = (material.cost_per_unit * num_sheets_needed) / total_elements if total_elements > 0 else 0
                     cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
