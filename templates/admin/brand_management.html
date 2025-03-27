@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestione Marche</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Gestione Marche Prodotto</h1>
+        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
+
+        <h2>Marche Disponibili</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome Marca</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for brand in brands %}
+                <tr>
+                    <td>{{ brand.name }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_brand', brand_id=brand.id) }}">Modifica</a>
+                        <form method="POST" action="{{ url_for('delete_brand', brand_id=brand.id) }}" style="display: inline;">
+                            <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questa marca?')">Elimina</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Aggiungi Nuova Marca</h3>
+        <p><a href="{{ url_for('add_brand') }}">Aggiungi Marca</a></p>
+
+    </body>
+</html>

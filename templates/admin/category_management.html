@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestione Categorie</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Gestione Categorie Prodotto</h1>
+        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
+
+        <h2>Categorie Disponibili</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome Categoria</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{{ url_for('edit_category', category_id=category.id) }}">Modifica</a>
+                    <form method="POST" action="{{ url_for('delete_category', category_id=category.id) }}" style="display: inline;">
+                        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questa categoria?')">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+
+        <h3>Aggiungi Nuova Categoria</h3>
+        <p><a href="{{ url_for('add_category') }}">Aggiungi Categoria</a></p>
+
+    </body>
+</html>

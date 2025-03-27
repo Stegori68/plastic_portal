@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aggiungi Marca</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Aggiungi Nuova Marca</h1>
+        <p><a href="{{ url_for('brand_management') }}">Torna alla Gestione Marche</a></p>
+        <form method="POST" action="{{ url_for('add_brand') }}">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.name.label }}<br>
+                {{ form.name() }}<br>
+                {% for error in form.name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </body>
+</html>

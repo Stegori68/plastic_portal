@@ -225,4 +225,104 @@ def export_data():
     # and prepare it for export (e.g., as an Excel file)
     return render_template('admin/export_data.html')
 
-# ... (Altre rotte per la gestione di utenti, materiali, lavorazioni, ecc.) ...
+@app.route('/admin/categories')
+@login_required
+def category_management():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    categories = ProductCategory.query.all()
+    return render_template('admin/category_management.html', categories=categories)
+
+@app.route('/admin/categories/add', methods=['GET', 'POST'])
+@login_required
+def add_category():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    form = ProductCategoryForm()
+    if form.validate_on_submit():
+        new_category = ProductCategory(name=form.name.data)
+        db.session.add(new_category)
+        db.session.commit()
+        flash('Categoria aggiunta con successo!', 'success')
+        return redirect(url_for('category_management'))
+    return render_template('admin/add_category.html', title='Aggiungi Categoria', form=form)
+
+@app.route('/admin/categories/edit/<int:category_id>', methods=['GET', 'POST'])
+@login_required
+def edit_category(category_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    category = ProductCategory.query.get_or_404(category_id)
+    form = ProductCategoryForm(obj=category)
+    if form.validate_on_submit():
+        category.name = form.name.data
+        db.session.commit()
+        flash('Categoria modificata con successo!', 'success')
+        return redirect(url_for('category_management'))
+    return render_template('admin/edit_category.html', title='Modifica Categoria', form=form, category=category)
+
+@app.route('/admin/categories/delete/<int:category_id>', methods=['POST'])
+@login_required
+def delete_category(category_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    category = ProductCategory.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    flash('Categoria eliminata con successo!', 'success')
+    return redirect(url_for('category_management'))
+
+@app.route('/admin/brands')
+@login_required
+def brand_management():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    brands = ProductBrand.query.all()
+    return render_template('admin/brand_management.html', brands=brands)
+
+@app.route('/admin/brands/add', methods=['GET', 'POST'])
+@login_required
+def add_brand():
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    form = ProductBrandForm()
+    if form.validate_on_submit():
+        new_brand = ProductBrand(name=form.name.data)
+        db.session.add(new_brand)
+        db.session.commit()
+        flash('Marca aggiunta con successo!', 'success')
+        return redirect(url_for('brand_management'))
+    return render_template('admin/add_brand.html', title='Aggiungi Marca', form=form)
+
+@app.route('/admin/brands/edit/<int:brand_id>', methods=['GET', 'POST'])
+@login_required
+def edit_brand(brand_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    brand = ProductBrand.query.get_or_404(brand_id)
+    form = ProductBrandForm(obj=brand)
+    if form.validate_on_submit():
+        brand.name = form.name.data
+        db.session.commit()
+        flash('Marca modificata con successo!', 'success')
+        return redirect(url_for('brand_management'))
+    return render_template('admin/edit_brand.html', title='Modifica Marca', form=form, brand=brand)
+
+@app.route('/admin/brands/delete/<int:brand_id>', methods=['POST'])
+@login_required
+def delete_brand(brand_id):
+    if current_user.role != 'admin':
+        flash('Accesso non autorizzato.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    brand = ProductBrand.query.get_or_404(brand_id)
+    db.session.delete(brand)
+    db.session.commit()
+    flash('Marca eliminata con successo!', 'success')
+    return redirect(url_for('brand_management'))

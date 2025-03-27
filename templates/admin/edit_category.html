@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Modifica Categoria</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Modifica Categoria</h1>
+        <p><a href="{{ url_for('category_management') }}">Torna alla Gestione Categorie</a></p>
+        <form method="POST" action="{{ url_for('edit_category', category_id=category.id) }}">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.name.label }}<br>
+                {{ form.name() }}<br>
+                {% for error in form.name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </body>
+</html>

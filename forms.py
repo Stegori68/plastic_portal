@@ -45,3 +45,11 @@ class UserForm(FlaskForm):
     role = SelectField('Ruolo', choices=[('user', 'Utente'), ('admin', 'Amministratore')], validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Salva Utente')
+
+class ProductCategoryForm(FlaskForm):
+    name = StringField('Nome Categoria', validators=[DataRequired()])
+    submit = SubmitField('Salva Categoria')
+
+class ProductBrandForm(FlaskForm):
+    name = StringField('Nome Marca', validators=[DataRequired()])
+    submit = SubmitField('Salva Marca')
