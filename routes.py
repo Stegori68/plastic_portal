@@ -136,7 +136,7 @@ def quote():
 
                     # --- Calculate Costs ---
                     tooling_cost = 0
-                    tooling_cost_per_production = 0
+                    tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production)) if 'tooling_cost_per_production' in locals() and tooling_cost_per_production is not None else decimal.Decimal('0')
                     if method_name.startswith("Taglio passante a fustella") or method_name.startswith("Mezzo taglio a fustella"):
                         fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
                         tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
