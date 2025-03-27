@@ -18,7 +18,7 @@ class ProductCategory(db.Model):
     __tablename__ = 'product_categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    materials = db.relationship('Material', backref='category', lazy=True)
+    materials = db.relationship('Material', backref='category', lazy=True, foreign_keys='[Material.category_id]')
 
     def __repr__(self):
         return f"ProductCategory('{self.name}')"
