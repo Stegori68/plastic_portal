@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestione Tassi di Cambio</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>Gestione Tassi di Cambio</h1>
+        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
+
+        <h2>Marche Disponibili</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Valuta</th>
+                    <th>Tasso</th>
+                    <th>Ultimo Aggiornamento</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exchange_rate in exchange_rates %}
+                    <tr>
+                        <td>{{ exchange_rate.currency }}</td>
+                        <td>{{ exchange_rate.rate }}</td>
+                        <td>{{ exchange_rate.last_updated }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_exchange_rate', exchange_rate_id=exchange_rate.id) }}" class="btn btn-sm btn-warning">Modifica</a>
+                            <a href="{{ url_for('delete_exchange_rate', exchange_rate_id=exchange_rate.id) }}" class="btn btn-sm btn-danger">Elimina</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Aggiungi Nuovo Tasso di Cambio</h3>
+        <p><a href="{{ url_for('add_exchange_rate') }}">Aggiungi Marca</a></p>
+
+    </body>
+</html>

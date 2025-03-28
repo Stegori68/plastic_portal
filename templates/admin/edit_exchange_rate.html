@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Modifica Tasso di Cambio</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <p><a href="{{ url_for('admin_exchange_rates') }}">Torna alla Gestione Tassi di Cambio</a></p>
+        <form method="POST" action="{{ url_for('edit_brand', brand_id=brand.id) }}">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.currency.label }}<br>
+                {{ form.currency() }}<br>
+                {% for error in form.currency.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.rate.label }}<br>
+                {{ form.rate() }}<br>
+                {% for error in form.rate.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </body>
+</html>

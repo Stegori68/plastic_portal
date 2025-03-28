@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, IntegerField, DecimalField, SelectField, FileField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, ValidationError, Length
+from decimal import Decimal
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -65,4 +66,8 @@ class SettingForm(FlaskForm):
     name = StringField('Nome Impostazione', validators=[DataRequired()])
     value = StringField('Valore', validators=[DataRequired()])
     submit = SubmitField('Salva Impostazione')
-    
+
+class ExchangeRateForm(FlaskForm):
+    currency = StringField('Valuta', validators=[DataRequired(), Length(max=10)])
+    rate = DecimalField('Tasso di Cambio', validators=[DataRequired()])
+    submit = SubmitField('Salva Tasso di Cambio')

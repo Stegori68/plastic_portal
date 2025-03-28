@@ -1,8 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, current_app, send_file
 from plastic_portal import app, db
 from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
-from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm, SettingForm
-from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand, Setting
+from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm, SettingForm, ExchangeRateForm
+from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand, Setting, ExchangeRate
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
 from . import app
@@ -613,3 +613,62 @@ def download_data():
         download_name=f'{data_type}.csv',
         mimetype='text/csv'
         )
+
+@app.route('/admin/exchange_rates')
+@login_required
+def admin_exchange_rates():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    exchange_rates = ExchangeRate.query.all()
+    return render_template('admin/exchange_rates.html', exchange_rates=exchange_rates)
+
+@app.route('/admin/exchange_rates/add', methods=['GET', 'POST'])
+@login_required
+def add_exchange_rate():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    form = ExchangeRateForm()
+    if form.validate_on_submit():
+        exchange_rate = ExchangeRate(
+            currency=form.currency.data.upper(),
+            rate=form.rate.data
+        )
+        db.session.add(exchange_rate)
+        db.session.commit()
+        flash('Tasso di cambio aggiunto con successo.', 'success')
+        return redirect(url_for('admin_exchange_rates'))
+    return render_template('admin/exchange_rate_form.html', form=form, title='Aggiungi Tasso di Cambio')
+
+@app.route('/admin/exchange_rates/edit/<int:exchange_rate_id>', methods=['GET', 'POST'])
+@login_required
+def edit_exchange_rate(exchange_rate_id):
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    exchange_rate = ExchangeRate.query.get_or_404(exchange_rate_id)
+    form = ExchangeRateForm(obj=exchange_rate)
+    if form.validate_on_submit():
+        exchange_rate.currency = form.currency.data.upper()
+        exchange_rate.rate = form.rate.data
+        db.session.commit()
+        flash('Tasso di cambio modificato con successo.', 'success')
+        return redirect(url_for('admin_exchange_rates'))
+    return render_template('admin/exchange_rate_form.html', form=form, title='Modifica Tasso di Cambio')
+
+@app.route('/admin/exchange_rates/delete/<int:exchange_rate_id>')
+@login_required
+def delete_exchange_rate(exchange_rate_id):
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    exchange_rate = ExchangeRate.query.get_or_404(exchange_rate_id)
+    db.session.delete(exchange_rate)
+    db.session.commit()
+    flash('Tasso di cambio eliminato con successo.', 'success')
+    return redirect(url_for('admin_exchange_rates'))
