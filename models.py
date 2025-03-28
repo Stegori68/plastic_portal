@@ -88,7 +88,7 @@ class ExchangeRate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(10), unique=True, nullable=False)
     rate = db.Column(db.Numeric(10, 4), nullable=False)
-    llast_updated = db.Column(db.TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_updated = db.Column(db.TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"ExchangeRate('{self.currency}', '{self.rate}')"
