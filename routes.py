@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request, current_app
+from flask import Flask, render_template, redirect, url_for, flash, request, current_app, send_file
 from plastic_portal import app, db
 from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
 from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm, SettingForm
@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 import os
+import csv
 import decimal
 from flask_mail import Message
 from plastic_portal import mail
@@ -545,3 +546,61 @@ def delete_setting(setting_id):
     db.session.commit()
     flash('Impostazione eliminata con successo.', 'success')
     return redirect(url_for('admin_settings'))
+
+@app.route('/admin/export')
+@login_required
+def export_data():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    return render_template('admin/export_data.html')
+
+@app.route('/admin/download_data', methods=['POST'])
+@login_required
+def download_data():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    data_type = request.form.get('data_type')
+
+    if data_type == 'users':
+        data = User.query.all()
+        header = ['ID', 'Username', 'Email', 'Role']
+        rows = [[user.id, user.username, user.email, user.role] for user in data]
+    elif data_type == 'materials':
+        data = Material.query.all()
+        header = ['ID', 'Name', 'Category', 'Brand', 'Width', 'Length', 'Cost Per Unit']
+        rows = [[material.id, material.name, material.category.name, material.brand.name, material.width, material.length, material.cost_per_unit] for material in data]
+    elif data_type == 'productions':
+        data = Production.query.all()
+        header = ['ID', 'Name', 'Setup Cost', 'Cutting Cost Per Sheet']
+        rows = [[production.id, production.name, production.setup_cost, production.cutting_cost_per_sheet] for production in data]
+    elif data_type == 'quotes':
+        data = Quote.query.all()
+        header = ['ID', 'User ID', 'Material ID', 'Production ID', 'Quantity', 'Date']
+        rows = [[quote.id, quote.user_id, quote.material_id, quote.production_id, quote.quantity, quote.date] for quote in data]
+    elif data_type == 'categories':
+        data = ProductCategory.query.all()
+        header = ['ID', 'Name']
+        rows = [[category.id, category.name] for category in data]
+    elif data_type == 'brands':
+        data = ProductBrand.query.all()
+        header = ['ID', 'Name']
+        rows = [[brand.id, brand.name] for brand in data]
+    elif data_type == 'settings':
+        data = Setting.query.all()
+        header = ['ID', 'Name', 'Value']
+        rows = [[setting.id, setting.name, setting.value] for setting in data]
+    else:
+        flash('Tipo di dati non valido.', 'danger')
+        return redirect(url_for('export_data'))
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(header)
+    writer.writerows(rows)
+
+    output.seek(0)
+    return send_file(output, as_attachment=True, download_name=f'{data_type}.csv', mimetype='text/csv')
