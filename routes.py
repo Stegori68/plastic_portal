@@ -91,6 +91,7 @@ def quote():
         drawing_file = form.drawing.data
         production_type_choice = form.production_type.data
         fustella_productions = form.fustella_productions.data
+        fustella_productions = decimal.Decimal(fustella_productions)
 
         material = Material.query.get_or_404(material_id)
         profit_margin_setting = Setting.query.filter_by(name='profit_margin').first()
@@ -163,8 +164,9 @@ def quote():
                     if method_name.startswith("Taglio passante a fustella") or method_name.startswith("Mezzo taglio a fustella"):
                         fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
                         tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
+                        tooling_cost = decimal.Decimal(str(tooling_cost))
                         tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
-                        tooling_cost_per_production = tooling_cost / total_elements / fustella_productions if fustella_productions > 0 else tooling_cost
+                        tooling_cost_per_production = tooling_cost / total_elements_decimal / fustella_productions if fustella_productions > 0 else tooling_cost
                     setup_cost = decimal.Decimal(str(setup_cost))
                     tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production))
                     numerator = setup_cost + cutting_cost_times_sheets + tooling_cost_per_production
