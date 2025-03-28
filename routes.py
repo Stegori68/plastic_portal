@@ -15,6 +15,7 @@ import io
 import decimal
 from flask_mail import Message
 from plastic_portal import mail
+from decimal import Decimal
 
 @app.route('/')
 def index():
