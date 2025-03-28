@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Gestione Impostazioni</h1>
-        <a href="{{ url_for('add_setting') }}" class="btn btn-primary">Aggiungi Impostazione</a>
+        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
         <table class="table">
             <thead>
                 <tr>
@@ -28,6 +28,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p><a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Amministrativa</a></p>
+        <a href="{{ url_for('add_setting') }}" class="btn btn-primary">Aggiungi Impostazione</a>
     </body>
 </html>
