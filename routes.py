@@ -558,8 +558,8 @@ def download_data():
 
     if data_type == 'users':
         data = User.query.all()
-        header = ['ID', 'Username', 'Email', 'Role']
-        rows = [[user.id, user.username, user.email, user.role] for user in data]
+        header = ['ID', 'Email', 'Role']
+        rows = [[user.id, user.email, user.role] for user in data]
     elif data_type == 'materials':
         data = Material.query.all()
         header = ['ID', 'Name', 'Category', 'Brand', 'Width', 'Length', 'Cost Per Unit']
