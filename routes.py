@@ -594,4 +594,10 @@ def download_data():
     writer.writerows(rows)
 
     output.seek(0)
-    return send_file(output, as_attachment=True, download_name=f'{data_type}.csv', mimetype='text/csv')
+    csv_data = output.getvalue()
+    return send_file(
+        io.BytesIO(csv_data),
+        as_attachment=True,
+        download_name=f'{data_type}.csv',
+        mimetype='text/csv'
+        )
