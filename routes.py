@@ -69,7 +69,7 @@ def logout():
 @login_required
 def quote():
     form = QuoteForm()
-    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name}") for material in Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()]
+    form.material_type.choices = [(material.id, f"{material.brand.name} - {material.category.name} - {material.name} - (sp. {material.thickness} mm)") for material in Material.query.join(ProductBrand).join(ProductCategory).order_by(ProductBrand.name, ProductCategory.name, Material.name).all()]
     form.production_type.choices = [
         ('best', 'Valuta la soluzione più conveniente'),
         ('compare', 'Confronta più soluzioni'),
@@ -111,7 +111,7 @@ def quote():
 
                 # --- Placeholder for reading drawing and getting shape ---
                 element_width = element_dimension_x
-                element_height = element_dimension_y
+                element_length = element_dimension_y
                 if drawing_file:
                     filename = secure_filename(drawing_file.filename)
                     # Save the file temporarily (you might want to process it without saving)
@@ -130,14 +130,14 @@ def quote():
                 sheet_length = material.length
                 useful_width = sheet_width - (Decimal(Setting.query.filter_by(name='useless_margin').first().value * 2))
                 useful_length = sheet_length - (Decimal(Setting.query.filter_by(name='useless_margin').first().value * 2))
-                parts_lenght_1 = useful_length // element_height
-                parts_width_1 = useful_width // element_width
-                parts_lenght_2 = useful_length // element_width
-                parts_width_2 = useful_width // element_height
-                if parts_lenght_1 * parts_width_1 > parts_lenght_2 * parts_width_2:
-                    elements_per_sheet = parts_lenght_1 * parts_width_1
+                parts_bylenght_1 = useful_length // element_length
+                parts_bywidth_1 = useful_width // element_width
+                parts_bylenght_2 = useful_length // element_width
+                parts_bywidth_2 = useful_width // element_length
+                if parts_bylenght_1 * parts_bywidth_1 > parts_bylenght_2 * parts_bywidth_2:
+                    elements_per_sheet = parts_bylenght_1 * parts_bywidth_1
                 else:
-                    elements_per_sheet = parts_lenght_2 * parts_width_2
+                    elements_per_sheet = parts_bylenght_2 * parts_bywidth_2
 
                 # elements_per_sheet = 1 # Replace with actual nesting calculation
                 # elements_per_sheet = perform_nesting(element_width, element_height, sheet_width, sheet_length)
