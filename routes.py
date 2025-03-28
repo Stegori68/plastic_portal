@@ -77,9 +77,14 @@ def quote():
         ('Taglio passante a fustella testa piana', 'Taglio passante a fustella testa piana'),
         ('Mezzo taglio a rotativa', 'Mezzo taglio a rotativa')
     ]
+    form.currency_type.choices = [
+        ('EUR', 'EUR'),
+        ('USD', 'USD')
+    ]
 
     if form.validate_on_submit():
         material_id = form.material_type.data
+        currency = form.currency_type.data
         element_dimension_x = form.element_dimension_x.data
         element_dimension_y = form.element_dimension_y.data
         quantity_requested = form.quantity.data
@@ -159,9 +164,8 @@ def quote():
                         fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
                         tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
                         tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
-                        tooling_cost_per_production = tooling_cost / fustella_productions if fustella_productions > 0 else tooling_cost
+                        tooling_cost_per_production = tooling_cost / total_elements / fustella_productions if fustella_productions > 0 else tooling_cost
                     setup_cost = decimal.Decimal(str(setup_cost))
-                    cutting_cost_times_sheets = decimal.Decimal(str(cutting_cost_times_sheets))
                     tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production))
                     numerator = setup_cost + cutting_cost_times_sheets + tooling_cost_per_production
                     cost_total_production_with_tooling = numerator / total_elements_decimal if total_elements_decimal > 0 else decimal.Decimal('0')
@@ -176,8 +180,13 @@ def quote():
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
                     selling_price_no_tooling = cost_per_element_no_tooling / (1 - profit_margin)
                     selling_price_with_tooling = cost_per_element_with_tooling / (1 - profit_margin)
+                    if currency != 'EUR':
+                        exchange_rate = ExchangeRate.query.filter_by(currency=currency).first()
+                        selling_price_no_tooling = selling_price_no_tooling * exchange_rate.rate
+                        selling_price_with_tooling = selling_price_with_tooling * exchange_rate.rate
 
                     result = {
+                        'currency': currency,
                         'method': method_name,
                         'order_quantity': total_elements,
                         'cost_production': round(cost_total_production_no_tooling, 3),
