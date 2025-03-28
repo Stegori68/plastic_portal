@@ -127,7 +127,18 @@ def quote():
                 # --- Placeholder for nesting logic in utils/nesting_utils.py ---
                 sheet_width = material.width
                 sheet_length = material.length
-                elements_per_sheet = 1 # Replace with actual nesting calculation
+                useful_width = sheet_width - (Setting.query.filter_by(name='useless_margin').first().value * 2)
+                useful_length = sheet_length - (Setting.query.filter_by(name='useless_margin').first().value * 2)
+                parts_lenght_1 = useful_length // element_height
+                parts_width_1 = useful_width // element_width
+                parts_lenght_2 = useful_length // element_width
+                parts_width_2 = useful_width // element_height
+                if parts_lenght_1 * parts_width_1 > parts_lenght_2 * parts_width_2:
+                    elements_per_sheet = parts_lenght_1 * parts_width_1
+                else:
+                    elements_per_sheet = parts_lenght_2 * parts_width_2
+
+                # elements_per_sheet = 1 # Replace with actual nesting calculation
                 # elements_per_sheet = perform_nesting(element_width, element_height, sheet_width, sheet_length)
 
                 if elements_per_sheet > 0:
