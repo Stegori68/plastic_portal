@@ -18,7 +18,7 @@ class ProductCategory(db.Model):
     __tablename__ = 'product_categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    materials = db.relationship('Material', backref='category', lazy=True, foreign_keys='[Material.category_id]')
+    materials = db.relationship('Material', backref='category_materials', lazy=True, foreign_keys='[Material.category_id]')
 
     def __repr__(self):
         return f"ProductCategory('{self.name}')"
@@ -27,7 +27,7 @@ class ProductBrand(db.Model):
     __tablename__ = 'product_brands'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    materials = db.relationship('Material', backref='brand', lazy=True)
+    materials = db.relationship('Material', backref='brand_materials', lazy=True)
 
     def __repr__(self):
         return f"ProductBrand('{self.name}')"
