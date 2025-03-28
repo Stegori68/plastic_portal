@@ -11,6 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 import os
 import csv
+import io
 import decimal
 from flask_mail import Message
 from plastic_portal import mail
