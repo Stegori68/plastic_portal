@@ -562,8 +562,8 @@ def download_data():
         rows = [[user.id, user.email, user.role] for user in data]
     elif data_type == 'materials':
         data = Material.query.all()
-        header = ['ID', 'Name', 'Category', 'Brand', 'Width', 'Length', 'Cost Per Unit']
-        rows = [[material.id, material.name, material.category.name, material.brand.name, material.width, material.length, material.cost_per_unit] for material in data]
+        header = ['ID', 'Brand', 'Category', 'Name', 'Width', 'Length', 'Thickness', 'Cost Per Unit']
+        rows = [[material.id, material.brand.name, material.category.name, material.name, material.width, material.length, material.thickness, material.cost_per_unit] for material in data]
     elif data_type == 'productions':
         data = Production.query.all()
         header = ['ID', 'Name', 'Setup Cost', 'Cutting Cost Per Sheet']
