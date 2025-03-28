@@ -78,8 +78,8 @@ def quote():
         ('Mezzo taglio a rotativa', 'Mezzo taglio a rotativa')
     ]
     form.currency_type.choices = [
-        ('EUR', 'EUR'),
-        ('USD', 'USD')
+        ('EUR', 'Euro'),
+        ('USD', 'Dollaro USA')
     ]
 
     if form.validate_on_submit():
