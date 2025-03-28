@@ -7,7 +7,7 @@
     <body>
         <h1>Modifica Materiale</h1>
         <p><a href="{{ url_for('material_management') }}">Torna alla Gestione Materiali</a></p>
-        <form method="POST" action="{{ url_for('edit_material', material_id=material.id) }}">
+        <form method="POST">
             {{ form.hidden_tag() }}
             <p>
                 {{ form.name.label }}<br>
