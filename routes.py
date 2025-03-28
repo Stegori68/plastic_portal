@@ -165,7 +165,7 @@ def quote():
                         fustella_tooling_cost_setting = Setting.query.filter_by(name='fustella_tooling_cost').first()
                         tooling_cost = float(fustella_tooling_cost_setting.value) if fustella_tooling_cost_setting else 400
                         tooling_cost = decimal.Decimal(str(tooling_cost))
-                        tooling_cost_expressed = tooling_cost / 0.8 # Example calculation
+                        tooling_cost_expressed = tooling_cost / decimal.Decimal(str(0.8)) # Example calculation
                         tooling_cost_per_production = tooling_cost / total_elements_decimal / fustella_productions if fustella_productions > 0 else tooling_cost
                     setup_cost = decimal.Decimal(str(setup_cost))
                     tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production))
