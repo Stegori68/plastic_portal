@@ -23,7 +23,7 @@ class QuoteForm(FlaskForm):
     drawing = FileField('Disegno (PDF/DXF)')
     production_type = SelectField('Tipologia Produzione', validators=[DataRequired()])
     fustella_productions = IntegerField('Numero di Produzioni per Ammortizzare la Fustella', validators=[NumberRange(min=1)], default=4)
-    currency_type = SelectField('Tipo di Valuta', choices=[('EUR', 'Euro'), ('USD', 'Dollaro USA')], validators=[DataRequired()])
+    currency_type = SelectField('Valuta dell\'offerta', choices=[('EUR', 'Euro'), ('USD', 'Dollaro USA')], validators=[DataRequired()])
     submit = SubmitField('Calcola Preventivo')
 
     def validate_drawing(form, field):
