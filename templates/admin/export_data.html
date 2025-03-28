@@ -13,24 +13,19 @@
         <h2>Opzioni di Esportazione</h2>
         <p>Seleziona i dati che desideri esportare:</p>
         <form method="POST" action="{{ url_for('download_data') }}">
-            {# You'll need to define a 'download_data' route and handle the export logic #}
-            <div>
-                <input type="checkbox" id="users" name="export_type" value="users">
-                <label for="users">Esporta Utenti</label>
+            <div class="mb-3">
+                <label for="data_type" class="form-label">Seleziona i dati da esportare:</label>
+                <select name="data_type" id="data_type" class="form-select">
+                    <option value="users">Utenti</option>
+                    <option value="materials">Materiali</option>
+                    <option value="productions">Produzioni</option>
+                    <option value="quotes">Preventivi</option>
+                    <option value="categories">Categorie</option>
+                    <option value="brands">Marche</option>
+                    <option value="settings">Impostazioni</option>
+                </select>
             </div>
-            <div>
-                <input type="checkbox" id="materials" name="export_type" value="materials">
-                <label for="materials">Esporta Materiali</label>
-            </div>
-            <div>
-                <input type="checkbox" id="productions" name="export_type" value="productions">
-                <label for="productions">Esporta Lavorazioni</label>
-            </div>
-            <div>
-                <input type="checkbox" id="quotes" name="export_type" value="quotes">
-                <label for="quotes">Esporta Preventivi</label>
-            </div>
-            <button type="submit">Esporta Dati</button>
+            <button type="submit" class="btn btn-primary">Scarica CSV</button>
         </form>
 
         {% else %}
