@@ -168,7 +168,7 @@ def quote():
                         tooling_cost_expressed = tooling_cost / decimal.Decimal(str(0.8)) # Example calculation
                         tooling_cost_per_production = tooling_cost / total_elements_decimal / fustella_productions if fustella_productions > 0 else tooling_cost
                     setup_cost = decimal.Decimal(str(setup_cost))
-                    tooling_cost_per_production = decimal.Decimal(str(tooling_cost_per_production))
+                    tooling_cost_per_production = round(decimal.Decimal(str(tooling_cost_per_production)), 3)
                     numerator = setup_cost + cutting_cost_times_sheets + tooling_cost_per_production
                     cost_total_production_with_tooling = numerator / total_elements_decimal if total_elements_decimal > 0 else decimal.Decimal('0')
                     cost_total_production_with_tooling = decimal.Decimal(str(cost_total_production_with_tooling))
