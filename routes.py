@@ -588,8 +588,8 @@ def download_data():
         flash('Tipo di dati non valido.', 'danger')
         return redirect(url_for('export_data'))
 
-    output = io.StringIO()
-    writer = csv.writer(output)
+    output = io.BytesIO()
+    writer = csv.writer(io.TextIOWrapper(output, encoding='utf-8'))
     writer.writerow(header)
     writer.writerows(rows)
 
