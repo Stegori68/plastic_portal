@@ -15,18 +15,18 @@
             <h2>{{ result.method }}</h2>
             <div>
                 <p>Quantitativo ordinabile: {{ result.order_quantity }}</p>
-                <p>Costo di produzione totale: {{ result.cost_production }}</p>
-                <p>Costo della materia prima totale: {{ result.cost_material }}</p>
-                <p>Costo totale per elemento: {{ result.cost_element }}</p>
+                <p>Costo di produzione totale: EUR {{ result.cost_production }}</p>
+                <p>Costo della materia prima totale: EUR {{ result.cost_material }}</p>
+                <p>Costo totale per elemento: EUR {{ result.cost_element }}</p>
                 <p>Prezzo di vendita proposto: {{ result.currency }} {{ result.selling_price }}</p>
                 <p>Elementi per lastra: {{ result.elements_per_sheet }}</p>
                 <p>Numero di lastre necessarie: {{ result.num_sheets }}</p>
 
                 {% if result.tooling_cost_expressed %}
-                    <p>Costo del tooling (espresso): {{ result.tooling_cost_expressed }}</p>
+                    <p>Costo del tooling (espresso): EUR {{ result.tooling_cost_expressed }}</p>
                 {% endif %}
                 {% if result.tooling_cost_distributed %}
-                    <p>Costo del tooling (distribuito): {{ result.tooling_cost_distributed }}</p>
+                    <p>Costo del tooling (distribuito): EUR {{ result.tooling_cost_distributed }}</p>
                 {% endif %}
             </div>
         {% endfor %}
