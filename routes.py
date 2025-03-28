@@ -170,10 +170,7 @@ def quote():
                     cost_total_production_no_tooling = decimal.Decimal(str(cost_total_production_no_tooling))
                     if material.currency != 'EUR':
                         exchange_rate = ExchangeRate.query.filter_by(currency=material.currency).first()
-                        if exchange_rate:
-                            material_cost = material.cost_per_unit * exchange_rate.rate
-                        else:
-                            material_cost = material.cost_per_unit
+                        material_cost = material.cost_per_unit * exchange_rate.rate
                     cost_material = (material_cost * num_sheets_needed) / total_elements if total_elements > 0 else 0
                     cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
