@@ -37,6 +37,13 @@
                 {% endfor %}
             </div>
             <div class="mb-3">
+                {{ form.currency_type.label(class="form-label") }}
+                {{ form.currency_type(class="form-select") }}
+                {% for error in form.currency_type.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
                 {{ form.drawing.label(class="form-label") }}
                 {{ form.drawing(class="form-control") }}
                 {% for error in form.drawing.errors %}
