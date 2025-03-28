@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, current_app
 from plastic_portal import app, db
 from plastic_portal.forms import LoginForm, QuoteForm, RegistrationForm, MaterialForm, ProductionForm
-from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm
+from plastic_portal.forms import UserForm, ProductCategoryForm, ProductBrandForm, SettingForm
 from plastic_portal.models import User, Material, Production, Quote, ProductCategory, ProductBrand, Setting
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import date
@@ -489,3 +489,59 @@ def send_quote_email():
         flash(f"Si è verificato un errore durante l'invio dell'email: {e}", "danger")
 
     return redirect(url_for('quote'))
+
+@app.route('/admin/settings')
+@login_required
+def admin_settings():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    settings = Setting.query.all()
+    return render_template('admin/settings.html', settings=settings)
+
+@app.route('/admin/settings/add', methods=['GET', 'POST'])
+@login_required
+def add_setting():
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    form = SettingForm()
+    if form.validate_on_submit():
+        setting = Setting(name=form.name.data, value=form.value.data)
+        db.session.add(setting)
+        db.session.commit()
+        flash('Impostazione aggiunta con successo.', 'success')
+        return redirect(url_for('admin_settings'))
+    return render_template('admin/setting_form.html', form=form, title='Aggiungi Impostazione')
+
+@app.route('/admin/settings/edit/<int:setting_id>', methods=['GET', 'POST'])
+@login_required
+def edit_setting(setting_id):
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    setting = Setting.query.get_or_404(setting_id)
+    form = SettingForm(obj=setting)
+    if form.validate_on_submit():
+        setting.name = form.name.data
+        setting.value = form.value.data
+        db.session.commit()
+        flash('Impostazione modificata con successo.', 'success')
+        return redirect(url_for('admin_settings'))
+    return render_template('admin/setting_form.html', form=form, title='Modifica Impostazione')
+
+@app.route('/admin/settings/delete/<int:setting_id>')
+@login_required
+def delete_setting(setting_id):
+    if current_user.role != 'admin':
+        flash('Non hai i permessi per accedere a questa pagina.', 'danger')
+        return redirect(url_for('index'))
+
+    setting = Setting.query.get_or_404(setting_id)
+    db.session.delete(setting)
+    db.session.commit()
+    flash('Impostazione eliminata con successo.', 'success')
+    return redirect(url_for('admin_settings'))

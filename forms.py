@@ -60,3 +60,9 @@ class ProductCategoryForm(FlaskForm):
 class ProductBrandForm(FlaskForm):
     name = StringField('Nome Marca', validators=[DataRequired()])
     submit = SubmitField('Salva Marca')
+
+class SettingForm(FlaskForm):
+    name = StringField('Nome Impostazione', validators=[DataRequired()])
+    value = StringField('Valore', validators=[DataRequired()])
+    submit = SubmitField('Salva Impostazione')
+    
