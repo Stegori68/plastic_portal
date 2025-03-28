@@ -9,9 +9,9 @@
 
         {% if results %}
         <p>Materiale richiesto: {{ material.brand.name }} - {{ material.category.name }} - {{ material.name }} (sp. {{ material.thickness }} mm)</p>
+        {% for result in results %}
         <p>Dimensioni richieste: {{ result.element_dimension_x }}x{{ result.element_dimension_y }}mm - Quantitativo richiesto: {{ quantity_requested }}</p>
 
-        {% for result in results %}
             <h2>{{ result.method }}</h2>
             <div>
                 <p>Quantitativo ordinabile: {{ result.order_quantity }}</p>
