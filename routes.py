@@ -343,16 +343,6 @@ def delete_production(production_id):
     flash('Lavorazione eliminata con successo!', 'success')
     return redirect(url_for('production_management'))
 
-@app.route('/admin/export')
-@login_required
-def export_data():
-    if current_user.role != 'admin':
-        flash('Accesso non autorizzato.', 'danger')
-        return redirect(url_for('admin_dashboard'))
-    # You'll likely want to fetch data from the database here
-    # and prepare it for export (e.g., as an Excel file)
-    return render_template('admin/export_data.html')
-
 @app.route('/admin/categories')
 @login_required
 def category_management():
