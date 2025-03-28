@@ -198,7 +198,9 @@ def quote():
                         'elements_per_sheet': elements_per_sheet,
                         'num_sheets': num_sheets_needed,
                         'tooling_cost_expressed': tooling_cost_expressed if 'tooling_cost_expressed' in locals() else None,
-                        'tooling_cost_distributed': tooling_cost_per_production if tooling_cost > 0 else None
+                        'tooling_cost_distributed': tooling_cost_per_production if tooling_cost > 0 else None,
+                        'element_dimension_x': element_dimension_x,
+                        'element_dimension_y': element_dimension_y
                     }
                     results.append(result)
 
