@@ -641,7 +641,7 @@ def add_exchange_rate():
         db.session.commit()
         flash('Tasso di cambio aggiunto con successo.', 'success')
         return redirect(url_for('admin_exchange_rates'))
-    return render_template('admin/edit_exchange_rate.html', form=form, title='Aggiungi Tasso di Cambio')
+    return render_template('admin/edit_exchange_rate.html', form=form, title='Aggiungi Tasso di Cambio', exchange_rate=None)
 
 @app.route('/admin/exchange_rates/edit/<int:exchange_rate_id>', methods=['GET', 'POST'])
 @login_required
