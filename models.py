@@ -44,6 +44,8 @@ class Material(db.Model):
     currency = db.Column(db.String(10))
     category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
     brand_id = db.Column(db.Integer, db.ForeignKey('product_brands.id'))
+    category = db.relationship('ProductCategory', backref='materials')
+    brand = db.relationship('ProductBrand', backref='materials')
     quotes = db.relationship('Quote', backref='related_quotes', lazy=True)
 
     def __repr__(self):

@@ -288,7 +288,6 @@ def edit_material(material_id):
         flash('Accesso non autorizzato.', 'danger')
         return redirect(url_for('admin_dashboard'))
     material = Material.query.get_or_404(material_id)
-    print(material)
     form = MaterialForm(obj=material)
     form.category.choices = [(category.id, category.name) for category in ProductCategory.query.all()]
     form.brand.choices = [(brand.id, brand.name) for brand in ProductBrand.query.all()]
