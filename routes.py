@@ -185,7 +185,7 @@ def quote():
                     if currency != 'EUR':
                         exchange_rate = ExchangeRate.query.filter_by(currency=currency).first()
                         selling_price_no_tooling = selling_price_no_tooling * exchange_rate.rate
-                        selling_price_with_tooling = selling_price_with_tooling * exchange_rate.rate
+                        selling_price_with_tooling = round(selling_price_with_tooling * exchange_rate.rate, 3)
 
                     result = {
                         'currency': currency,
