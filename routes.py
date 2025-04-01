@@ -181,7 +181,7 @@ def quote():
                     cost_per_element_no_tooling = cost_total_production_no_tooling + cost_material
                     cost_per_element_with_tooling = cost_total_production_with_tooling + cost_material
                     selling_price_no_tooling = cost_per_element_no_tooling / (1 - profit_margin)
-                    selling_price_with_tooling = cost_per_element_with_tooling / (1 - profit_margin)
+                    selling_price_with_tooling = round(cost_per_element_with_tooling / (1 - profit_margin), 3)
                     if currency != 'EUR':
                         exchange_rate = ExchangeRate.query.filter_by(currency=currency).first()
                         selling_price_no_tooling = selling_price_no_tooling * exchange_rate.rate
@@ -198,7 +198,7 @@ def quote():
                         'elements_per_sheet': elements_per_sheet,
                         'num_sheets': num_sheets_needed,
                         'tooling_cost_expressed': tooling_cost_expressed if 'tooling_cost_expressed' in locals() else None,
-                        'selling_price_with_tooling': round(selling_price_with_tooling, 3),
+                        'selling_price_with_tooling': selling_price_with_tooling if 'tooling_cost_per_production' in locals() else None,
                         'element_dimension_x': element_dimension_x,
                         'element_dimension_y': element_dimension_y
                     }
